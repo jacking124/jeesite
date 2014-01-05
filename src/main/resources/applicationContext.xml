@@ -87,7 +87,11 @@
 	
 	<!-- 配置 JSR303 Bean Validator 定义 -->
 	<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />
-
+    <bean id="stat-filter" class="com.alibaba.druid.filter.stat.StatFilter">
+       <property name="slowSqlMillis" value="10000" />
+       <property name="logSlowSql" value="true" />
+       <property name="mergeSql" value="true" />
+    </bean>
 	<!-- Production 环境 -->
  	<beans profile="production">
  		
@@ -126,6 +130,11 @@
 			
 			<!-- 配置监控统计拦截的filters -->
 		    <property name="filters" value="stat" /> 
+		    <property name="proxyFilters">
+		    <list>
+               <ref bean="stat-filter" />
+            </list>
+		    </property>
 		</bean>
 		
 		<!-- 数据源配置, 使用应用服务器的数据库连接池 
